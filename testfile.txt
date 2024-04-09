@@ -1,40 +1,12 @@
-#include <iostream>
-#include <memory>
+Hello, World!
 
-class B;  // 需要先声明，因为A和B互相引用
 
-class A {
-public:
-    std::shared_ptr<B> bPtr;
-    A() { std::cout << "A Constructor" << std::endl; }
-    ~A() { std::cout << "A Destructor" << std::endl; }
-};
+This is a test file for fopen system call testing.
 
-class B {
-public:
-    std::weak_ptr<A> aWeakPtr;
-    B() { std::cout << "B Constructor" << std::endl; }
-    ~B() { std::cout << "B Destructor" << std::endl; }
-};
+You can use this file to test reading operations.
 
-int main() {
-    // std::shared_ptr<A> a = std::make_shared<A>();
-    // std::shared_ptr<B> b = std::make_shared<B>();
-    // std::weak_ptr<A> c =a; //weak_ptr不会增加shared_ptr的引用计数，但是可以通过weak_ptr的use_count来访问所指向的shared——ptr的引用计数，
-    // b->aWeakPtr = a;
-    // std::shared_ptr<A> d =a;
-    // a->bPtr = b;
-    // std::cout<<b.use_count()<<std::endl; // 2
-    // std::cout<<a.use_count()<<std::endl; // 2
-    // std::cout<<a->bPtr.use_count()<<std::endl; // 2 
-    // std::cout<<b->aWeakPtr.use_count()<<std::endl; // 1
-    // std::cout<<c.use_count()<<std::endl; // 1
-    typedef enum {
-        Event_Read = 1 << 0, //读事件
-        Event_Write = 1 << 1, //写事件
-        Event_Error = 1 << 2, //错误事件
-        Event_LT = 7 << 1,//水平触发
-    } Poll_Event;
-    std::cout<<Poll_Event.Event_Error<<std::endl;
-    return 0;
-}
+Make sure to check for errors in your program to handle files that might not exist or cannot be opened.
+
+
+
+Happy coding!
