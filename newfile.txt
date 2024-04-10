@@ -1,0 +1,12 @@
+Hello, World!
+
+
+This is a test file for fopen system call testing.
+
+You can use this file to test reading operations.
+
+Make sure to check for errors in your program to handle files that might not exist or cannot be opened.
+
+
+
+Happy coding!
