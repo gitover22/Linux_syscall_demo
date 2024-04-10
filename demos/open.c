@@ -1,18 +1,21 @@
 #include <stdio.h>
 #include <unistd.h> // open write
 #include <fcntl.h> // O_RDONLY
+#include <errno.h> // errno
+#include <string.h> // strerror
 /**
  * read(fd, buff,size)
  * success: 读取的字节（为0说明读到末尾）
  * fail：-1
  * 
 */
-int main(){
-    int fd1,fd2;
-    fd1 = open("/home/huafeng/syscall_Demos/testfile.txt",O_RDONLY);
-    fd2 = open("/home/huafeng/syscall_Demos/newfile.txt",O_RDWR|O_CREAT,0777);
+int main(int argc,char *argv[]){
+    int fd1,fd2,fd3;
+    fd1 = open(argv[1],O_RDONLY);
+    fd2 = open(argv[2],O_RDWR|O_CREAT,0777); //文件权限为 :mode & ^umask
     if(fd1 == -1 || fd2 == -1 ){
         printf("open fail\n");
+        printf("%s\n",strerror(errno));
         return;
     }else{
         printf("open success,fd1:%d   fd2:%d\n",fd1,fd2);
@@ -23,9 +26,8 @@ int main(){
         buff[s] = '\0'; // 添加结束标志
         printf("%s",buff);
         ssize_t t= write(fd2,buff,s);
-        printf("==========写入%ld bytes=======",t);
+        printf("\n==========写入%ld bytes=======\n",t);
     }
-    // printf("%d",EOF); // -1
     if(s == -1){
         perror("读错");
     }
