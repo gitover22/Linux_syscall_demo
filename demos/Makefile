@@ -7,6 +7,7 @@ SOURCES := $(wildcard *.c)
 # 从.c文件名生成可执行文件名列表
 EXECUTABLES := $(SOURCES:%.c=%)
 
+
 # 默认目标：编译所有的.c文件生成可执行文件
 all: $(EXECUTABLES)
 
