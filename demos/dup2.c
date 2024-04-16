@@ -7,7 +7,7 @@
 */
 int main()
 {
-    int r = dup2(STDOUT_FILENO,20);
+    int r = dup2(STDOUT_FILENO,20); // 20 指向了STDOUT_FILENO
     if(r == -1){
         perror("dup2 error");
     }
