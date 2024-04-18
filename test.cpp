@@ -1,4 +1,6 @@
 // #include <iostream>
+#include<unistd.h>
+#include <stdlib.h>
 #include<memory>
 // #include "pthread.h"
 #include "_huafeng.h"
@@ -105,20 +107,24 @@ void tes_ptr() {
 
 int main(int argc,char *argv[])
 {
+    void test_fork();
+    void test__();
+    test__();
 
 
-    std::shared_ptr<int> ptr =std::make_shared<int>(12);
-    std::shared_ptr<int> p2 =ptr;
-    std::shared_ptr<int> p3 =std::move(ptr); // move之后，ptr就会变为空指针
 
-    print_NUM<int>(ptr.use_count());
-    // print_NUM(ptr.get()); //
-    if(ptr == nullptr)
-    std::cout<<"null"<<std::endl;
+    // std::shared_ptr<int> ptr =std::make_shared<int>(12);
+    // std::shared_ptr<int> p2 =ptr;
+    // std::shared_ptr<int> p3 =std::move(ptr); // move之后，ptr就会变为空指针
 
-    print_NUM<int>(p2.use_count());
-    print_NUM<int>(p3.use_count());
-    // tes_ptr();
+    // print_NUM<int>(ptr.use_count());
+    // // print_NUM(ptr.get()); //
+    // if(ptr == nullptr)
+    // std::cout<<"null"<<std::endl;
+
+    // print_NUM<int>(p2.use_count());
+    // print_NUM<int>(p3.use_count());
+    // // tes_ptr();
     // signal tes1;
     // signal* p1 =signal::Get_instance();
     // signal* p2 =signal::Get_instance();
@@ -151,4 +157,31 @@ int* test(){
     static int a=10;
     std::cout<<&a<<std::endl;
     return &a;
+}
+
+void test_fork(){
+    printf("befork\n");
+    int count =0 ;
+    for (size_t i = 0; i < 3; i++)
+    {
+        pid_t ret = fork();
+        if(ret == -1){
+            perror("fork error");
+        }else if(ret == 0){
+            count++;
+            printf("i am :%d",getpid());
+        }
+    }
+    printf("共创建了%d个子进程\n",count);
+}
+
+void test__(){
+    printf("before\n");
+    for(int i =0;i<10;i++){
+        pid_t ret = fork();
+        if(ret == 0){
+            printf("%d\n",getpid());
+            break;
+        }
+    }
 }

@@ -2,9 +2,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdlib.h>
-int main()
-
-{
+void test(){
     printf("fork之前的代码，子进程也会复制这部分代码，但没有执行的机会\n");
 
     pid_t ret  = fork(); // 创建子进程
@@ -24,6 +22,47 @@ int main()
     }
     printf("父子进程都可以执行的部分\n");
     sleep(1000);
+}
+void test2(){
+    printf("before!\n");
+    int i=0;
+    for(;i<5;i++){
+        if(fork() == 0){
+            break;
+        }
+    }
+    if(i == 5){
+        sleep(5);
+        printf("father\n");
+    }else{
+        sleep(i);
+        printf("son id : %d,parent: %d\n",getpid(),getppid());
+    }
+    exit(EXIT_SUCCESS);
+}
+    int num  =1 ;
+void test3(){
+    if(fork() == 0){
+        //son
+        sleep(2); // 等待父进程先执行
+        printf("son num: %d\n",num); // 1
+        num = 10; 
+        printf("son num: %d\n",num); // 10
+    }else{
+        printf("fat num: %d\n",num); // 1
+        num =20;
+        printf("fat num: %d\n",num); // 20
 
+
+        sleep(3);
+
+    }
+        printf("num: %d\n",num); // 1
+    
+    printf("over\n");
+}
+int main(){
+    
+    test3();
     return 0;
 }
