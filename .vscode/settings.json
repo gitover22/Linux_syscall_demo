@@ -3,6 +3,7 @@
         "fcntl.h": "c",
         "unistd.h": "c",
         "cstdlib": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "stat.h": "c"
     }
 }
