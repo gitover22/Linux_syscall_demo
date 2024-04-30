@@ -6,6 +6,7 @@
 #define READERS_COUNT 5
 #define WRITERS_COUNT 3
 
+
 pthread_rwlock_t rwlock;
 
 // 模拟共享资源
