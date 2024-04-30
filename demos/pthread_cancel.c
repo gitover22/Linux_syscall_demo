@@ -19,7 +19,7 @@ thread_func(void *ignored_argument)
         handle_error_en(s, "pthread_setcancelstate");
 
     printf("thread_func(): started; cancellation disabled\n");
-    sleep(5);
+    sleep(5); // 在睡眠过程中，收到了主线程的取消请求，但是不会处理，因为前面设置了PTHREAD_CANCEL_DISABLE
     printf("thread_func(): about to enable cancellation\n");
 
     s = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL); // 设置可取消状态为enable,接受线程的取消
@@ -27,7 +27,7 @@ thread_func(void *ignored_argument)
         handle_error_en(s, "pthread_setcancelstate");
 
     /* sleep() is a cancellation point */
-    sleep(1000);        /* Should get canceled while we sleep */
+    sleep(1000);        // Should get canceled while we sleep  sleep() 函数是一个取消点，线程会在这里响应之前的取消请求。
 
     /* Should never get here */
 
@@ -50,7 +50,8 @@ main(void)
     sleep(2);           /* Give thread a chance to get started */
 
     printf("main(): sending cancellation request\n");
-    s = pthread_cancel(thr);
+    // pthread_cancel不会阻塞等待线程结束，它只是向线程发送一个取消信号。线程的取消与否依赖于它是否达到取消点(如sleep等)以及当时的取消状态设置
+    s = pthread_cancel(thr); // pthread_cancel 发送一个取消请求给目标线程，但它本身并不会阻塞调用者，仅仅发送一个请求，然后立即返回
     if (s != 0)
         handle_error_en(s, "pthread_cancel");
 
