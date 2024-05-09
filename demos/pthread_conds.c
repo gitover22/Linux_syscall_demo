@@ -21,35 +21,34 @@ struct share_data *head = NULL;
 // 消费者线程
 void *consumer(void * argv){
     while(1){
-    pthread_mutex_lock(&mutex);
-    if(head == NULL){ // 等待生产者生产数据
-        pthread_cond_wait(&cond,&mutex);
-    }
-    struct share_data *temp = head;
-    head = head->next;
-    printf("consumer get data:%d\n",temp->num);
-    
-    pthread_mutex_unlock(&mutex);
-    free(temp);
-    sleep(1);
+        pthread_mutex_lock(&mutex);
+        if(head == NULL){ // 等待生产者生产数据
+            pthread_cond_wait(&cond,&mutex); // 先接触互斥锁，待到条件变量cond就绪后加上锁
+        }
+        struct share_data *temp = head;
+        head = head->next;
+        printf("consumer get data:%d\n",temp->num);
+        
+        pthread_mutex_unlock(&mutex);
+        free(temp);
+        sleep(1);
     }
     return NULL;
 }
 // 模拟生产者
 void *producer(void * argv){
-    while (1)
-    {
-    struct share_data *temp = malloc(sizeof(struct share_data));
-    temp->num = rand()%100;
-    printf("producer produce data:%d\n",temp->num);
-    pthread_mutex_lock(&mutex);
-    // 头插法
-    temp->next = head;
-    head = temp;
-    pthread_mutex_unlock(&mutex);
-    pthread_cond_signal(&cond); //唤醒一个等待条件变量cond的线程
-    // pthread_cond_broadcast(&cond); //唤醒所有等待条件变量cond的线程
-    sleep(2);
+    while (1){
+        struct share_data *temp = malloc(sizeof(struct share_data));
+        temp->num = rand()%100;
+        printf("producer produce data:%d\n",temp->num);
+        pthread_mutex_lock(&mutex);
+        // 头插法
+        temp->next = head;
+        head = temp;
+        pthread_mutex_unlock(&mutex);
+        pthread_cond_signal(&cond); //唤醒一个等待条件变量cond的线程
+        // pthread_cond_broadcast(&cond); //唤醒所有等待条件变量cond的线程
+        sleep(2);
     }
     return NULL;
 }
@@ -75,7 +74,7 @@ int main()
         pthread_join(producer_tid[i],NULL);
     }
 
-
+    pthread_mutex_destroy(&mutex);
 
     pthread_cond_destroy(&cond);
     return 0;
