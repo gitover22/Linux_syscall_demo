@@ -8,7 +8,7 @@
 std::timed_mutex mtx;
 int share_data = 0;
 void func(){
-    std::unique_lock<std::timed_mutex> lock(mtx,std::defer_lock_t());
+    std::unique_lock<std::timed_mutex> lock(mtx,std::defer_lock);
     lock.try_lock_for(std::chrono::milliseconds(1));  // 尝试获取锁，最多等待1ms,1ms内没有获取到锁，则直接在无锁状态继续执行
     for(int i=0 ;i<1000000;i++)
         share_data++;
